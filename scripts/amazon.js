@@ -1,4 +1,4 @@
-import {cart} from "../data/cart.js";
+import {cart,addToCart} from "../data/cart.js";
 import {products} from "../data/products.js";
 let productsHtml = '';
 
@@ -54,43 +54,28 @@ products.forEach((product)=>{
   </div>
   `;
 });
+
+
+//update quantity and display it on page
+function updateCartQuantity(){
+  //calculate quantity 
+  let quantity=0;
+  cart.forEach((cartItem) => {
+    quantity += cartItem.quantity;
+  });
+  //display quantity using the dom
+  document.querySelector('.js-cart-quantity').innerHTML = quantity;
+  console.log(quantity);
+  console.log(cart);
+}
+
 document.querySelector('.js-products-grid').innerHTML= productsHtml;
 
 document.querySelectorAll('.js-add-to-cart').forEach((button)=>{
   button.addEventListener('click',()=>{
     const productId = button.dataset.productId;  //get product name out
-    let matchingItem;
-    cart.forEach((item) => {
-      if(productId === item.productId){
-        matchingItem = item;
-        
-      }
-    });
-    //const quantitySelector = document.quarySelector(`.js-quantity-selector-${productId}`);
-    //const value = quantitySelector.value;  //string
+    addToCart(productId);
+    updateCartQuantity();
     
-
-    if(matchingItem){
-      //matchingItem.quantity += 1;
-      matchingItem.quantity += Number(document.querySelector(`.js-quantity-selector-${productId}`).value); 
-      //we are selecting productId insted of product.id because because we are getting poduct.id as productId when we click button using data element as detaset kebab ---> camel case.
-      //we use .value to get the value out from select element
-      //we use Number() to convert the value into number because dom usually gives us a string. 
-    }else{
-      //add the product to the cart
-      cart.push({
-        productId : productId,
-        quantity : Number(document.querySelector(`.js-quantity-selector-${productId}`).value)
-      }); 
-    }
-    //calculate quantity 
-    let quantity=0;
-    cart.forEach((product) => {
-      quantity += product.quantity;
-    });
-    //display quantity using the dom
-    document.querySelector('.js-cart-quantity').innerHTML = quantity;
-    console.log(quantity);
-    console.log(cart);
   });
 });
