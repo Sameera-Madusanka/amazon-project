@@ -25,7 +25,7 @@ products.forEach((product)=>{
     </div>
 
     <div class="product-quantity-container">
-      <select>
+      <select class="js-quantity-selector-${product.id}">
         <option selected value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -61,15 +61,24 @@ document.querySelectorAll('.js-add-to-cart').forEach((button)=>{
     cart.forEach((item) => {
       if(productId === item.productId){
         matchingItem = item;
+        
       }
     });
+    //const quantitySelector = document.quarySelector(`.js-quantity-selector-${productId}`);
+    //const value = quantitySelector.value;  //string
+    
+
     if(matchingItem){
-      matchingItem.quantity += 1;
+      //matchingItem.quantity += 1;
+      matchingItem.quantity += Number(document.querySelector(`.js-quantity-selector-${productId}`).value); 
+      //we are selecting productId insted of product.id because because we are getting poduct.id as productId when we click button using data element as detaset kebab ---> camel case.
+      //we use .value to get the value out from select element
+      //we use Number() to convert the value into number because dom usually gives us a string. 
     }else{
       //add the product to the cart
       cart.push({
         productId : productId,
-        quantity : 1
+        quantity : Number(document.querySelector(`.js-quantity-selector-${productId}`).value)
       }); 
     }
     //calculate quantity 
@@ -79,8 +88,7 @@ document.querySelectorAll('.js-add-to-cart').forEach((button)=>{
     });
     //display quantity using the dom
     document.querySelector('.js-cart-quantity').innerHTML = quantity;
-
     console.log(quantity);
-    console.log(cart);  
+    console.log(cart);
   });
 });
